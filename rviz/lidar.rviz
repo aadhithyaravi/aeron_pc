@@ -1,0 +1,19 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Topic: /scan
+      Enabled: true
+      Size (Pixels): 8
+      Style: Flat Squares
+      Color: 255; 0; 0
+  Global Options:
+    Fixed Frame: laser_frame
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select

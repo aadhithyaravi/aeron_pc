@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--
+    CASTER WHEEL MACRO
+    ──────────────────
+    Passive corners. Same X offset as drive wheels.
+    Front at +Y, rear at -Y.
+
+    swivel → free Z yaw (any direction)
+    wheel  → rolls along Y same as drive wheels
+             rpy="1.5708 0 0" ✓
+  -->
+
+  <xacro:macro name="caster" params="name x y">
+
+    <link name="${name}_mount">
+      <inertial>
+        <mass value="0.001"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.0000001" ixy="0.0" ixz="0.0"
+                 iyy="0.0000001" iyz="0.0"
+                 izz="0.0000001"/>
+      </inertial>
+    </link>
+
+    <link name="${name}_wheel">
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${caster_radius}" length="${caster_width}"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+
+      <!-- Hub -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${caster_radius * 0.35}" length="${caster_width + 0.003}"/>
+        </geometry>
+        <material name="dark_grey"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${caster_radius}" length="${caster_width}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="${caster_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${caster_mass/12.0*(3*caster_radius*caster_radius + caster_width*caster_width)}"
+          ixy="0.0" ixz="0.0"
+          iyy="${caster_mass/12.0*(3*caster_radius*caster_radius + caster_width*caster_width)}"
+          iyz="0.0"
+          izz="${caster_mass/2.0*caster_radius*caster_radius}"/>
+      </inertial>
+
+    </link>
+
+    <!--
+      Swivel joint:
+        z = -(base_height/2 + wheel_radius)
+            places the swivel pivot at the same height as drive wheels
+            so all wheels touch the ground equally
+        type = continuous → free 360° yaw (passive swivel)
+        axis = 0 0 1 → rotates around vertical Z axis
+    -->
+    <joint name="${name}_swivel" type="continuous">
+      <parent link="base_link"/>
+      <child  link="${name}_mount"/>
+      <origin xyz="${x} ${y} ${-(base_height/2.0 + caster_radius)}" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <dynamics damping="0.001" friction="0.0"/>
+    </joint>
+
+    <!--
+      Wheel spin joint:
+        origin z = +caster_radius → wheel center is above the mount (touches ground)
+        rpy = "1.5708 0 0" → rotates cylinder to roll along Y axis
+        axis = 0 1 0 → spin axis after RPY = world Y
+    -->
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="${name}_mount"/>
+      <child  link="${name}_wheel"/>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <axis xyz="0 1 0"/>
+      <dynamics damping="0.001" friction="0.0"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>

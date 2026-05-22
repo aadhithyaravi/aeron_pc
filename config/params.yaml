@@ -1,0 +1,13 @@
+/pc_core/subscriber_node:
+  ros__parameters:
+    scan_topic: '/scan'
+    cmd_vel_topic: '/cmd_vel'
+    debug: true
+
+/pc_core/processing_node:
+  ros__parameters:
+    scan_topic: '/scan'
+    processed_topic: '/processed_scan'
+    buffer_size: 10
+    publish_processed: false
+    debug: true

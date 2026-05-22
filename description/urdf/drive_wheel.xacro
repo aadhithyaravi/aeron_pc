@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- DRIVE WHEEL MACRO -->
+  <xacro:macro name="drive_wheel" params="name x y">
+
+    <!-- ================= LINK ================= -->
+    <link name="${name}">
+
+      <!-- Visual -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="dark_grey"/>
+      </visual>
+
+      <!-- Hub -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius * 0.35}" length="${wheel_width + 0.003}"/>
+        </geometry>
+        <material name="white"/>
+      </visual>
+
+      <!-- Collision -->
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+
+      <!-- Inertia -->
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${wheel_mass/12.0*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+          ixy="0.0" ixz="0.0"
+          iyy="${wheel_mass/12.0*(3*wheel_radius*wheel_radius + wheel_width*wheel_width)}"
+          iyz="0.0"
+          izz="${wheel_mass/2.0*wheel_radius*wheel_radius}"/>
+      </inertial>
+
+    </link>
+
+    <!-- ================= JOINT ================= -->
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}"/>
+
+      <!-- Wheel position -->
+      <origin xyz="${x} ${y} ${-(base_height/2.0 + wheel_radius)}"
+              rpy="1.5708 0 0"/>
+
+      <!-- 🔥 FIXED AXIS (CRITICAL) -->
+      <axis xyz="0 0 1"/>
+
+      <dynamics damping="0.01" friction="0.1"/>
+    </joint>
+
+    <!-- ================= GAZEBO PROPERTIES ================= -->
+    <gazebo reference="${name}">
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <kp>1000000.0</kp>
+      <kd>1.0</kd>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

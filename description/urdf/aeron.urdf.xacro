@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot name="aeron_one" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ===================== PARAMETERS ===================== -->
+  <xacro:property name="wheel_y_offset" value="0.2"/>
+  <xacro:property name="wheel_x_offset" value="0.2"/>
+  <xacro:property name="front_y" value="0.3"/>
+  <xacro:property name="rear_y" value="-0.3"/>
+
+  <!-- ===================== INCLUDES ===================== -->
+  <xacro:include filename="$(find pc_core)/description/urdf/base.xacro"/>
+  <xacro:include filename="$(find pc_core)/description/urdf/drive_wheel.xacro"/>
+  <xacro:include filename="$(find pc_core)/description/urdf/caster.xacro"/>
+
+  <!-- ros2_control include -->
+  <xacro:include filename="$(find pc_core)/description/ros2_control/aeron.ros2_control.xacro"/>
+
+  <!-- ===================== ROBOT STRUCTURE ===================== -->
+
+  <!-- Drive wheels -->
+  <xacro:drive_wheel name="left_wheel"  x="0.0" y="${wheel_y_offset}"/>
+  <xacro:drive_wheel name="right_wheel" x="0.0" y="-${wheel_y_offset}"/>
+
+  <!-- Casters -->
+  <xacro:caster name="front_right" x="${wheel_x_offset}" y="${front_y}"/>
+  <xacro:caster name="front_left"  x="-${wheel_x_offset}" y="${front_y}"/>
+  <xacro:caster name="rear_right"  x="${wheel_x_offset}" y="${rear_y}"/>
+  <xacro:caster name="rear_left"   x="-${wheel_x_offset}" y="${rear_y}"/>
+
+  <!-- ===================== ROS2 CONTROL ===================== -->
+
+  <!-- MUST exist inside your ros2_control xacro -->
+  <xacro:aeron_ros2_control name="AeronSystem"/>
+
+  <!-- ===================== GAZEBO PLUGIN ===================== -->
+
+  <gazebo>
+  <plugin filename="gz_ros2_control-system"
+          name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+
+    <parameters>/home/aadhi/ros2_ws/src/pc_core/config/controllers.yaml</parameters>
+
+  </plugin>
+</gazebo>
+</robot>

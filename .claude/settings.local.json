@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(colcon build *)",
+      "Bash(python3 -c \"import pc_core; print\\(pc_core.__file__\\); from pc_core.subscriber_node import SubscriberNode; print\\('subscriber_node OK'\\)\")",
+      "Bash(/home/aadhi/ros2_ws/install/pc_core/bin/subscriber_node --help)",
+      "Bash(bash -c \"source /home/aadhi/ros2_ws/install/setup.bash && ros2 run pc_core subscriber_node --help\")",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && echo \"PYTHONPATH=$PYTHONPATH\" && python3 -c \"import sys; print\\([p for p in sys.path if \\\\\"pc_core\\\\\" in p or \\\\\"site-packages\\\\\" in p][:3]\\)\"')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && python3 -c \"from pc_core.subscriber_node import main; print\\(\\\\\"Entry point OK\\\\\"\\)\"')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 pkg executables pc_core')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 pkg list | grep pc_core')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 pkg prefix pc_core')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 pkg executables pc_core 2>&1; echo \"---END---\"')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 pkg executables pc_core 2>&1; echo \"exit: $?\"')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && which ros2 pkg && ros2 pkg list 2>&1 | head -5')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && echo \"AMENT_PREFIX_PATH=$AMENT_PREFIX_PATH\" && cat /home/aadhi/ros2_ws/install/pc_core/share/pc_core/package.xml | grep -E \"<exec_depend|<run_depend\"')",
+      "Bash(bash -c 'source /home/aadhi/ros2_ws/install/setup.bash && ros2 run pc_core subscriber_node --help 2>&1 | head -10')"
+    ]
+  }
+}
